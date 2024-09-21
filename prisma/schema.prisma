@@ -8,24 +8,44 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
+  id            String   @id @map("_id") @default(auto()) @db.ObjectId
   name          String?
-  email         String   @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
-  tasks         Task[]   // Relation to the Task model
+  accounts      Account[]
+  sessions      Session[]
 }
 
+model Account {
+  id                 String   @id @map("_id") @default(auto()) @db.ObjectId
+  userId             String   @db.ObjectId
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
 
-model Task{
-  id          String   @id @default(cuid()) @map("_id")
-  title       String
-  description String?
-  date        String
-  isCompleted Boolean  @default(false)
-  isImportant Boolean  @default(false)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
 
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
-  userId      String
+model Session {
+  id           String   @id @map("_id") @default(auto()) @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id        String   @id @map("_id") @default(auto()) @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
 }

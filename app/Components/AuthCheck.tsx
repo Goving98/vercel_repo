@@ -8,7 +8,7 @@ export default function AuthCheck({ children }: { children: React.ReactNode }) {
 
   if (!session) {
     // Show login or some other UI when not authenticated
-    return <div>Please log in to continue</div>;
+    return <p>You must be logged in to view this content.</p>;
   }
 
   return <>{children}</>;
