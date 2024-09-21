@@ -3,8 +3,10 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import GlobalStyleProvider from "./providers/GlobalStyleProvider";
-import ContextProvider from "./providers/ContextProvider";
-import { ClerkProvider } from '@clerk/nextjs'
+import { GlobalProvider } from "./context/globalProvider";
+import { useSession, signIn, signOut } from "next-auth/react";
+import AuthCheck from "./Components/AuthCheck";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,11 +26,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  // const {userId} = auth()
+  // const { data: session } = useSession();
   return (
-    <ClerkProvider>
       <html lang="en">
         <head>
             <link
@@ -40,14 +43,14 @@ export default function RootLayout({
             />
           </head>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <ContextProvider>
             <GlobalStyleProvider>
+            <GlobalProvider>
               <Sidebar/>
+              <AuthCheck>{children}</AuthCheck>
               <div className="w-full">{children}</div>
+            </GlobalProvider>
               </GlobalStyleProvider>
-            </ContextProvider>
         </body>
       </html>
-    </ClerkProvider>
   );
 }

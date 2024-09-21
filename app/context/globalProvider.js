@@ -8,12 +8,16 @@ export const GlobalUpdateContext = createContext();
 export const GlobalProvider = ({ children }) => {
     const [selectedTheme, setSelectedTheme] = useState(0);
     const theme = themes[selectedTheme];
+    const updateTheme = (themeIndex) => {
+      setSelectedTheme(themeIndex);
+    };
+  
     return (
         <GlobalContext.Provider
           value={{
             theme,
           }}
-        ><GlobalUpdateContext.Provider value={{}}>
+        ><GlobalUpdateContext.Provider value={{ updateTheme }}>
             {children}
         </GlobalUpdateContext.Provider>
         </GlobalContext.Provider>
