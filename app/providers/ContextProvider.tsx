@@ -1,8 +1,8 @@
 "use client";
-import React from 'react'
+import React from "react";
 // import GlobalStyleProvider from './GlobalStyleProvider';
 import { GlobalProvider } from '../context/globalProvider';
-import  Toaster from "styled-components" ;
+import { Toaster } from "react-hot-toast";
 
 interface Props{
     children : React.ReactNode;
@@ -14,15 +14,21 @@ function ContextProvider({children}: Props) {
     React.useEffect(() =>{
         setTimeout(()=>{
             setisReady(true);
-        },200);
+        },250);
     },[]);
     if(!isReady){
-        return null;
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="loader"></span>
+            </div>
+          );
     }
-    return <GlobalProvider>
-        {/* <Toaster /> */}
-        {children}
-        </GlobalProvider>;
+    return (
+        <GlobalProvider>
+          <Toaster />
+          {children}
+        </GlobalProvider>
+      );
 }
 
 export default ContextProvider;

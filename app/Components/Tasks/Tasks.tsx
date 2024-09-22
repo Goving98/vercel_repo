@@ -18,7 +18,7 @@ function Task({ title, tasks }: Props) {
     return (
     <TaskStyled theme={theme}>
       {modal && <Modal content={<CreateContent />} />}
-      <h1>{title}</h1>
+      <h1>Title Here</h1>
 
       <button className="btn-rounded" onClick={openModal}>
         {plus}

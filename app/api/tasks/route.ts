@@ -1,7 +1,10 @@
-import prisma from "@/app/utils/connect";
+// import prisma from "@/app/utils/connect";
 import { getServerSession } from "next-auth/next";  // Adjust based on your NextAuth setup
 import { authOptions } from "@/app/api/tasks/[...nextauth]"; // Make sure the path is correct
 import { NextResponse } from "next/server";
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 // Create a new task
 export async function POST(req: Request) {
@@ -35,7 +38,7 @@ export async function POST(req: Request) {
         date,
         isCompleted: completed,
         isImportant: important,
-        userId: session.user.id, // Assuming session user has an id field
+        userId: "unauthenticated-user", // Assuming session user has an id field
       },
     });
     console.log("Task is:",task);
@@ -58,7 +61,7 @@ export async function GET() {
 
     const tasks = await prisma.task.findMany({
       where: {
-        userId: session.user.id, // Use session user id
+        userId: "unauthenticated-user", // Use session user id
       },
     });
 

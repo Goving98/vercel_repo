@@ -1,5 +1,5 @@
 // app/Components/LoginButton.tsx
-"use client";
+// "use client";
 
 import { signIn } from "next-auth/react";
 

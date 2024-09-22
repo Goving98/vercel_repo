@@ -1,16 +1,36 @@
 "use client";
 import React, { createContext, useState, useContext } from "react";
 import themes from "./themes";
-
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 export const GlobalContext = createContext();
 export const GlobalUpdateContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
     const [selectedTheme, setSelectedTheme] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [modal, setModal] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
+    const { data: session } = useSession();
+    const user = session?.user;
+    const [tasks, setTasks] = useState([]);
+  
     const theme = themes[selectedTheme];
+
     const updateTheme = (themeIndex) => {
       setSelectedTheme(themeIndex);
+    };
+    const openModal = () => {
+      setModal(true);
+    };
+  
+    const closeModal = () => {
+      setModal(false);
+    };
+  
+    const collapseMenu = () => {
+      setCollapsed(!collapsed);
     };
     const allTasks = async () => {
       setIsLoading(true);
@@ -31,13 +51,44 @@ export const GlobalProvider = ({ children }) => {
       }
     };
   
+    const updateTask = async (task) => {
+      try {
+        const res = await axios.put(`/api/tasks`, task);
   
+        toast.success("Task updated");
+  
+        allTasks();
+      } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong");
+      }
+    };
+  const completedTasks = tasks.filter((task) => task.isCompleted === true);
+  const importantTasks = tasks.filter((task) => task.isImportant === true);
+  const incompleteTasks = tasks.filter((task) => task.isCompleted === false);
+
+  React.useEffect(() => {
+    if (session) allTasks();
+  }, [session]);
+
     return (
         <GlobalContext.Provider
           value={{
-            theme,
+              theme,
+              tasks,
+            isLoading,
+            completedTasks,
+            importantTasks,
+            incompleteTasks,
+            updateTask,
+            modal,
+            openModal,
+            closeModal,
+            allTasks,
+            collapsed,
+            collapseMenu,
           }}
-        ><GlobalUpdateContext.Provider value={{ updateTheme }}>
+        ><GlobalUpdateContext.Provider value={{}}>
             {children}
         </GlobalUpdateContext.Provider>
         </GlobalContext.Provider>

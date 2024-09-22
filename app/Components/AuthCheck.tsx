@@ -1,5 +1,5 @@
 // app/Components/AuthCheck.tsx
-"use client"; // This tells Next.js that it's a Client Component
+// "use client"; // This tells Next.js that it's a Client Component
 
 import { useSession } from "next-auth/react";
 

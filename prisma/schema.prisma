@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Task {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  date        DateTime
+  isCompleted Boolean
+  isImportant Boolean
+  userId      String    @db.ObjectId
+}
+
 model User {
   id            String   @id @map("_id") @default(auto()) @db.ObjectId
   name          String?
