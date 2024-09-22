@@ -23,6 +23,7 @@ function Sidebar () {
     const handleClick = (link: string) => {
         router.push(link);
     };
+    
 
     return( 
     <SidebarStyled theme={theme} collapsed={collapsed}>
@@ -34,9 +35,9 @@ function Sidebar () {
         <div className="image">
           <Image width={70} height={70} src="/avatar1.png" alt="profile" />
         </div>
-        <div className="user-btn absolute z-20 top-0 w-full h-full">
-          <img src={image || "/avatar1.png"} alt="User Avatar" className="rounded-full w-8 h-8" />
-        </div>
+        {/* <div className="user-btn absolute z-20 top-0 w-full h-full">
+          <img src="/avatar1.png" alt="Image here" className="rounded-full w-8 h-8" />
+        </div> */}
         <h1 className="capitalize">
           {name}
         </h1>
